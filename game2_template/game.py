@@ -211,12 +211,11 @@ def print_menu(exits, room_items, inv_items):
     for item in inv_items:
         print("DROP " + item["id"].upper() + " to drop " + item["name"])
 
-    #
-    # COMPLETE ME!
-    #
-    
+    print("Current inventory weight: " + str(total_weight(inventory))[:3] + "kg (Max. weight: 5kg)")
+
+    print("")
     print("What do you want to do?")
-    print()
+    print("")
 
 
 def is_valid_exit(exits, chosen_exit):
@@ -274,13 +273,16 @@ def execute_take(item_id):
     found = False
 
     for item in current_room["items"]:
-        if item_id == item["id"] and total_weight(inventory) + item["mass"] < 5:
+
+
+        if item_id == item["id"]:
+            if (total_weight(inventory) + item["mass"]) >= 5:
+                print("You are carrying too many items right now. You need to drop some items you hoarder.")
+                return
+
             inventory.append(item)
             current_room["items"].remove(item)
             found = True
-        elif total_weight(inventory) + item["mass"] >= 5:
-            print("You are carrying too many items right now. You need to drop some items you hoarder.")
-            return
 
     if found == False:
         print("You cannot take that.")
